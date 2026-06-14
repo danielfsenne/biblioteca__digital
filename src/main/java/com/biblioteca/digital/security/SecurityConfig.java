@@ -42,14 +42,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())).permitAll()
-                .requestMatchers(
-                    new AntPathRequestMatcher("/auth/**"),
-                    new AntPathRequestMatcher("/swagger-ui/**"),
-                    new AntPathRequestMatcher("/swagger-ui.html"),
-                    new AntPathRequestMatcher("/v3/api-docs/**")
-                ).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
