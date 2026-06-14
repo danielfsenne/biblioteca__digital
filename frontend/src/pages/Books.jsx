@@ -104,21 +104,21 @@ export default function Books() {
   const books = searchResults ?? data.content
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Livros</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Livros</h1>
           <p className="text-gray-500 text-sm mt-1">Gerencie o acervo da biblioteca</p>
         </div>
-        <button onClick={openCreate} className="btn-primary flex items-center gap-2">
+        <button onClick={openCreate} className="btn-primary flex items-center gap-2 shrink-0">
           <Plus size={16} />
           Novo Livro
         </button>
       </div>
 
       <div className="card">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <div className="relative max-w-xs">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
+          <div className="relative w-full sm:max-w-xs">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
@@ -141,59 +141,61 @@ export default function Books() {
           </div>
         ) : (
           <>
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-100">
-                <tr>
-                  <th className="table-header">Título</th>
-                  <th className="table-header">Autor</th>
-                  <th className="table-header">ISBN</th>
-                  <th className="table-header">Categoria</th>
-                  <th className="table-header text-center">Qtd.</th>
-                  <th className="table-header w-24"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {books.map((b) => (
-                  <tr key={b.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="table-cell font-medium text-gray-900">{b.title}</td>
-                    <td className="table-cell text-gray-500">{b.author}</td>
-                    <td className="table-cell text-gray-400">{b.isbn || '—'}</td>
-                    <td className="table-cell">
-                      {b.category ? (
-                        <span className="bg-indigo-50 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-md">
-                          {b.category.name}
-                        </span>
-                      ) : '—'}
-                    </td>
-                    <td className="table-cell text-center">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${b.quantity > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                        {b.quantity ?? 0}
-                      </span>
-                    </td>
-                    <td className="table-cell">
-                      <div className="flex items-center gap-1 justify-end">
-                        <button
-                          onClick={() => openEdit(b)}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(b.id)}
-                          disabled={deleting === b.id}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                        >
-                          {deleting === b.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                        </button>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[600px]">
+                <thead className="bg-gray-50 border-b border-gray-100">
+                  <tr>
+                    <th className="table-header">Título</th>
+                    <th className="table-header">Autor</th>
+                    <th className="table-header hidden md:table-cell">ISBN</th>
+                    <th className="table-header hidden sm:table-cell">Categoria</th>
+                    <th className="table-header text-center">Qtd.</th>
+                    <th className="table-header w-20"></th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {books.map((b) => (
+                    <tr key={b.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="table-cell font-medium text-gray-900 max-w-[180px] truncate">{b.title}</td>
+                      <td className="table-cell text-gray-500 max-w-[140px] truncate">{b.author}</td>
+                      <td className="table-cell text-gray-400 hidden md:table-cell">{b.isbn || '—'}</td>
+                      <td className="table-cell hidden sm:table-cell">
+                        {b.category ? (
+                          <span className="bg-indigo-50 text-indigo-700 text-xs font-medium px-2 py-0.5 rounded-md">
+                            {b.category.name}
+                          </span>
+                        ) : '—'}
+                      </td>
+                      <td className="table-cell text-center">
+                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${b.quantity > 0 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                          {b.quantity ?? 0}
+                        </span>
+                      </td>
+                      <td className="table-cell">
+                        <div className="flex items-center gap-1 justify-end">
+                          <button
+                            onClick={() => openEdit(b)}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(b.id)}
+                            disabled={deleting === b.id}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                          >
+                            {deleting === b.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {!searchResults && data.totalPages > 1 && (
-              <div className="px-6 py-3 border-t border-gray-100 flex items-center justify-between">
+              <div className="px-4 sm:px-6 py-3 border-t border-gray-100 flex items-center justify-between">
                 <p className="text-xs text-gray-400">
                   Página {data.number + 1} de {data.totalPages}
                 </p>
@@ -225,13 +227,13 @@ export default function Books() {
         title={modal.editing ? 'Editar Livro' : 'Novo Livro'}
       >
         <form onSubmit={handleSave} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="col-span-1 sm:col-span-2">
               <label className="label">Título *</label>
               <input className="input" required value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Título do livro" />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-1 sm:col-span-2">
               <label className="label">Autor *</label>
               <input className="input" required value={form.author}
                 onChange={(e) => setForm({ ...form, author: e.target.value })} placeholder="Nome do autor" />
@@ -246,7 +248,7 @@ export default function Books() {
               <input className="input" type="number" min={0} value={form.quantity}
                 onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-1 sm:col-span-2">
               <label className="label">Categoria</label>
               <select
                 className="input"

@@ -71,13 +71,13 @@ export default function Categories() {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Categorias</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Categorias</h1>
           <p className="text-gray-500 text-sm mt-1">Organize os livros por categoria</p>
         </div>
-        <button onClick={openCreate} className="btn-primary flex items-center gap-2">
+        <button onClick={openCreate} className="btn-primary flex items-center gap-2 shrink-0">
           <Plus size={16} />
           Nova Categoria
         </button>
@@ -94,45 +94,47 @@ export default function Categories() {
             <p className="text-sm text-gray-400">Nenhuma categoria cadastrada</p>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="table-header">ID</th>
-                <th className="table-header">Nome</th>
-                <th className="table-header w-24"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {categories.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="table-cell text-gray-400">#{c.id}</td>
-                  <td className="table-cell">
-                    <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                      <span className="font-medium text-gray-900">{c.name}</span>
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    <div className="flex items-center gap-1 justify-end">
-                      <button
-                        onClick={() => openEdit(c)}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
-                      >
-                        <Edit2 size={14} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(c.id)}
-                        disabled={deleting === c.id}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                      >
-                        {deleting === c.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                      </button>
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[320px]">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className="table-header">ID</th>
+                  <th className="table-header">Nome</th>
+                  <th className="table-header w-20"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {categories.map((c) => (
+                  <tr key={c.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="table-cell text-gray-400">#{c.id}</td>
+                    <td className="table-cell">
+                      <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
+                        <span className="font-medium text-gray-900">{c.name}</span>
+                      </span>
+                    </td>
+                    <td className="table-cell">
+                      <div className="flex items-center gap-1 justify-end">
+                        <button
+                          onClick={() => openEdit(c)}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                        >
+                          <Edit2 size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(c.id)}
+                          disabled={deleting === c.id}
+                          className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        >
+                          {deleting === c.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

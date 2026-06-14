@@ -11,7 +11,7 @@ const links = [
   { to: '/users', icon: Users, label: 'Usuários' },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }) {
   const { logout, user } = useAuth()
   const navigate = useNavigate()
 
@@ -40,6 +40,7 @@ export default function Sidebar() {
             key={to}
             to={to}
             end={to === '/'}
+            onClick={onClose}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive

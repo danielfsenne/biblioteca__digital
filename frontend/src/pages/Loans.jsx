@@ -85,20 +85,23 @@ export default function Loans() {
   const defaultDue = tomorrow.toISOString().split('T')[0]
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Empréstimos</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Empréstimos</h1>
           <p className="text-gray-500 text-sm mt-1">Controle de empréstimos e devoluções</p>
         </div>
-        <button onClick={() => { setForm({ ...EMPTY_LOAN, dueDate: defaultDue }); setModal(true) }} className="btn-primary flex items-center gap-2">
+        <button
+          onClick={() => { setForm({ ...EMPTY_LOAN, dueDate: defaultDue }); setModal(true) }}
+          className="btn-primary flex items-center gap-2 shrink-0"
+        >
           <Plus size={16} />
           Novo Empréstimo
         </button>
       </div>
 
       <div className="card">
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-2">
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-wrap items-center gap-2">
           {['all', 'active', 'returned'].map((f) => (
             <button
               key={f}
@@ -122,58 +125,60 @@ export default function Loans() {
             <p className="text-sm text-gray-400">Nenhum empréstimo encontrado</p>
           </div>
         ) : (
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-100">
-              <tr>
-                <th className="table-header">Livro</th>
-                <th className="table-header">Usuário</th>
-                <th className="table-header">Empréstimo</th>
-                <th className="table-header">Vencimento</th>
-                <th className="table-header">Devolução</th>
-                <th className="table-header">Status</th>
-                <th className="table-header w-24"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {filtered.map((l) => (
-                <tr key={l.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="table-cell font-medium text-gray-900">{l.book?.title}</td>
-                  <td className="table-cell text-gray-500">{l.user?.name}</td>
-                  <td className="table-cell text-gray-400">{l.loanDate}</td>
-                  <td className={`table-cell ${isOverdue(l) ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
-                    {l.dueDate}
-                    {isOverdue(l) && <span className="ml-1 text-xs">(vencido)</span>}
-                  </td>
-                  <td className="table-cell text-gray-400">{l.returnDate || '—'}</td>
-                  <td className="table-cell">
-                    <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                      l.returned
-                        ? 'bg-green-50 text-green-700'
-                        : isOverdue(l)
-                        ? 'bg-red-50 text-red-700'
-                        : 'bg-amber-50 text-amber-700'
-                    }`}>
-                      {l.returned ? 'Devolvido' : isOverdue(l) ? 'Vencido' : 'Em aberto'}
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    {!l.returned && (
-                      <button
-                        onClick={() => handleReturn(l.id)}
-                        disabled={returning === l.id}
-                        className="flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-800 disabled:opacity-50"
-                      >
-                        {returning === l.id
-                          ? <Loader2 size={12} className="animate-spin" />
-                          : <RotateCcw size={12} />}
-                        Devolver
-                      </button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px]">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className="table-header">Livro</th>
+                  <th className="table-header">Usuário</th>
+                  <th className="table-header hidden md:table-cell">Empréstimo</th>
+                  <th className="table-header">Vencimento</th>
+                  <th className="table-header hidden lg:table-cell">Devolução</th>
+                  <th className="table-header">Status</th>
+                  <th className="table-header w-20"></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {filtered.map((l) => (
+                  <tr key={l.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="table-cell font-medium text-gray-900 max-w-[160px] truncate">{l.book?.title}</td>
+                    <td className="table-cell text-gray-500 max-w-[120px] truncate">{l.user?.name}</td>
+                    <td className="table-cell text-gray-400 hidden md:table-cell">{l.loanDate}</td>
+                    <td className={`table-cell ${isOverdue(l) ? 'text-red-600 font-medium' : 'text-gray-400'}`}>
+                      {l.dueDate}
+                      {isOverdue(l) && <span className="ml-1 text-xs hidden sm:inline">(vencido)</span>}
+                    </td>
+                    <td className="table-cell text-gray-400 hidden lg:table-cell">{l.returnDate || '—'}</td>
+                    <td className="table-cell">
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
+                        l.returned
+                          ? 'bg-green-50 text-green-700'
+                          : isOverdue(l)
+                          ? 'bg-red-50 text-red-700'
+                          : 'bg-amber-50 text-amber-700'
+                      }`}>
+                        {l.returned ? 'Devolvido' : isOverdue(l) ? 'Vencido' : 'Em aberto'}
+                      </span>
+                    </td>
+                    <td className="table-cell">
+                      {!l.returned && (
+                        <button
+                          onClick={() => handleReturn(l.id)}
+                          disabled={returning === l.id}
+                          className="flex items-center gap-1.5 text-xs font-medium text-indigo-600 hover:text-indigo-800 disabled:opacity-50 whitespace-nowrap"
+                        >
+                          {returning === l.id
+                            ? <Loader2 size={12} className="animate-spin" />
+                            : <RotateCcw size={12} />}
+                          Devolver
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
