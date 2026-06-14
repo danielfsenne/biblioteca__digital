@@ -1,6 +1,7 @@
 package com.biblioteca.digital.service;
 
 import com.biblioteca.digital.entity.User;
+import com.biblioteca.digital.exception.BusinessException;
 import com.biblioteca.digital.exception.ResourceNotFoundException;
 import com.biblioteca.digital.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,12 @@ public class UserService {
 
     public User update(Long id, User updated) {
         User existing = findById(id);
+        String newEmail = updated.getEmail();
+        if (!existing.getEmail().equals(newEmail) && repository.findByEmail(newEmail).isPresent()) {
+            throw new BusinessException("E-mail já cadastrado");
+        }
         existing.setName(updated.getName());
-        existing.setEmail(updated.getEmail());
+        existing.setEmail(newEmail);
         return repository.save(existing);
     }
 

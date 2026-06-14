@@ -5,6 +5,8 @@ import com.biblioteca.digital.entity.*;
 import com.biblioteca.digital.exception.*;
 import com.biblioteca.digital.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -52,6 +54,10 @@ public class LoanService {
 
     public Loan returnLoan(Long loanId) {
         Loan loan = findById(loanId);
+        String authenticatedEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!loan.getUser().getEmail().equals(authenticatedEmail)) {
+            throw new AccessDeniedException("Você não pode alterar o status de empréstimos de outros usuários");
+        }
         if (loan.isReturned()) {
             throw new BusinessException("Empréstimo já devolvido");
         }

@@ -27,6 +27,7 @@ public class User implements UserDetails {
 
     @NotBlank
     @Email
+    @Column(unique = true)
     private String email;
 
     @JsonIgnore

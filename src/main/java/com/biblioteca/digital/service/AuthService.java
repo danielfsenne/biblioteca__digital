@@ -28,6 +28,9 @@ public class AuthService implements UserDetailsService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new com.biblioteca.digital.exception.BusinessException("E-mail já cadastrado");
+        }
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())

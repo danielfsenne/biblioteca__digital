@@ -1,6 +1,7 @@
 package com.biblioteca.digital.exception;
 
 import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public Map<String, String> handleBusiness(BusinessException ex) {
+        return Map.of("error", ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> handleAccessDenied(AccessDeniedException ex) {
         return Map.of("error", ex.getMessage());
     }
 
