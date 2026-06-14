@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.DEV
+    ? 'http://localhost:8080'
+    : 'https://bibliotecadigital-production-158d.up.railway.app',
 })
 
 api.interceptors.request.use((config) => {
